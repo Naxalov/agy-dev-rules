@@ -105,6 +105,8 @@ agy plugin uninstall agy-dev-rules
 agy-dev-rules/
 ├── plugin.json                 # Core plugin manifest (JSONC)
 ├── README.md                   # Plugin documentation
+├── docs/                       # Human reference guides (not loaded into AI runtime context)
+│   └── CHANGE_TAXONOMY.md      # Comprehensive software change classification guide
 ├── assets/
 │   └── logo.svg                # Plugin icon (min 128x128, transparent)
 ├── rules/
@@ -154,6 +156,7 @@ Invoke the procedural audit:
 ## 🧩 Components Overview
 
 - **Manifest (`plugin.json`)**: Configures display name, suggested prompts, and metadata.
+- **Documentation (`docs/`)**: Human-facing guides and taxonomies excluded from runtime agent prompt budgets.
 - **Skills (`skills/dev-workflow/`)**: Teaches the agent standard operating procedures.
 - **Rules (`rules/AGENTS.md`)**: Enforces style and safety guardrails across turns.
 - **Subagents (`agents/rules-auditor.md`)**: Specialized worker for auditing conformity.
