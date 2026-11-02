@@ -20,6 +20,7 @@ Before implementing any changes, always provide a proposal and short explanation
 - **Progressive Disclosure**: Encapsulate procedural runbooks into dedicated skills under `skills/<skill_name>/SKILL.md`. Keep the primary `SKILL.md` concise and place extensive manuals in `references/`.
 - **Namespaced MCP Tools**: When exposing MCP servers, prefix server and tool identifiers with `agy-dev-rules-` to prevent collisions across the global namespace.
 - **Hook Idempotence**: Keep lifecycle hooks fast and non-blocking. Scripts must cleanly handle unexpected inputs and return valid JSON to `stdout`.
+- **Proactive Hook Suggestions**: When observing frequent, repetitive command execution by the developer (e.g., manual formatting after edits, running test suites, linting, or cache clearing), proactively suggest automating the workflow via an Antigravity lifecycle hook (such as `PostToolUse` or `PreToolUse` in `hooks.json`).
 
 ## 4. Code Standards & Verification
 - **Shell Scripts**: Ensure all bash/sh scripts use `set -euo pipefail` and include execution permissions (`chmod +x`).
