@@ -106,7 +106,8 @@ agy-dev-rules/
 ├── plugin.json                 # Core plugin manifest (JSONC)
 ├── README.md                   # Plugin documentation
 ├── docs/                       # Human reference guides (not loaded into AI runtime context)
-│   └── CHANGE_TAXONOMY.md      # Comprehensive software change classification guide
+│   ├── CHANGE_TAXONOMY.md      # Comprehensive software change classification guide
+│   └── DEVELOPER_COMMANDS_TAXONOMY.md # Lifecycle scripts and inner dev-loop commands guide
 ├── assets/
 │   └── logo.svg                # Plugin icon (min 128x128, transparent)
 ├── rules/
