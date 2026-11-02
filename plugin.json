@@ -1,0 +1,21 @@
+{
+  "name": "agy-dev-rules",
+  "displayName": "Antigravity Dev Rules",
+  "version": "0.1.0",
+  "description": "Development standards, custom workflows, rules, and hooks for Antigravity projects.",
+  "logo": "assets/logo.svg",
+  "author": {
+    "name": "Naxalov",
+    "url": "https://github.com/Naxalov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Naxalov/agy-dev-rules.git"
+  },
+  "suggestedPrompts": [
+    "Audit workspace compliance with Antigravity dev rules",
+    "Explain active project guidelines and coding constraints",
+    "Verify plugin structure and validate components"
+  ]
+}
+

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agy-dev-rules-helper": {
+      "command": "node",
+      "args": ["scripts/mcp-server.js"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
+

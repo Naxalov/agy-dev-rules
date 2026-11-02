@@ -1,0 +1,7 @@
+{
+  "display_name": "Rules Watcher Daemon",
+  "description": "Background service that monitors workspace changes against rule definitions.",
+  "command": "sh scripts/watcher.sh",
+  "has_web_ui": false
+}
+
