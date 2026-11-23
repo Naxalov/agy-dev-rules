@@ -113,10 +113,14 @@ agy-dev-rules/
 ├── rules/
 │   └── AGENTS.md               # Continuous rules enforced while plugin is active
 ├── skills/
-│   └── dev-workflow/           # Procedural skill with slash command /dev-workflow
-│       ├── SKILL.md            # Skill instructions with YAML frontmatter
+│   ├── dev-workflow/           # Procedural skill with slash command /dev-workflow
+│   │   ├── SKILL.md            # Skill instructions with YAML frontmatter
+│   │   └── scripts/            # Helper scripts
+│   │       └── audit-rules.sh
+│   └── env-info/               # Environment & hardware inspection slash command /env-info
+│       ├── SKILL.md            # Skill instructions (excludes disk/space usage)
 │       └── scripts/            # Helper scripts
-│           └── audit-rules.sh
+│           └── collect-env-info.sh
 ├── agents/
 │   └── rules-auditor.md        # Dedicated subagent definition
 ├── mcp_config.json             # MCP server definitions (Stdio / Streamable HTTP)
@@ -158,7 +162,7 @@ Invoke the procedural audit:
 
 - **Manifest (`plugin.json`)**: Configures display name, suggested prompts, and metadata.
 - **Documentation (`docs/`)**: Human-facing guides and taxonomies excluded from runtime agent prompt budgets.
-- **Skills (`skills/dev-workflow/`)**: Teaches the agent standard operating procedures.
+- **Skills (`skills/dev-workflow/`, `skills/env-info/`)**: Teaches the agent standard operating procedures and exposes `/dev-workflow` and `/env-info` slash commands.
 - **Rules (`rules/AGENTS.md`)**: Enforces style and safety guardrails across turns.
 - **Subagents (`agents/rules-auditor.md`)**: Specialized worker for auditing conformity.
 - **Hooks (`hooks.json`)**: Intercepts tool calls before execution.
