@@ -92,12 +92,56 @@ if [[ "$OS_KERNEL" == "Linux" ]]; then
   if [[ "$gpu_found" -eq 0 ]]; then
     echo "None detected"
   fi
+
+  echo "--- Storage Hardware (HDD / SSD) ---"
+  disk_found=0
+  if command -v lsblk >/dev/null 2>&1; then
+    while IFS= read -r line; do
+      [[ -z "$line" ]] && continue
+      name="$(echo "$line" | sed -n 's/.*NAME="\([^"]*\)".*/\1/p')"
+      dtype="$(echo "$line" | sed -n 's/.*TYPE="\([^"]*\)".*/\1/p')"
+      [[ "$dtype" != "disk" ]] && continue
+      vendor="$(echo "$line" | sed -n 's/.*VENDOR="\([^"]*\)".*/\1/p' | xargs)"
+      model="$(echo "$line" | sed -n 's/.*MODEL="\([^"]*\)".*/\1/p' | xargs)"
+      size="$(echo "$line" | sed -n 's/.*SIZE="\([^"]*\)".*/\1/p' | xargs)"
+      rota="$(echo "$line" | sed -n 's/.*ROTA="\([^"]*\)".*/\1/p' | xargs)"
+      tran="$(echo "$line" | sed -n 's/.*TRAN="\([^"]*\)".*/\1/p' | xargs)"
+      media_type="Unknown"
+      if [[ "$rota" == "0" ]]; then
+        media_type="SSD/Flash"
+      elif [[ "$rota" == "1" ]]; then
+        media_type="HDD/Rotational"
+      fi
+      desc="${vendor:+$vendor }${model:-Unknown Model}"
+      echo "  /dev/${name}: ${desc} | Capacity: ${size:-?} | Media: ${media_type} (ROTA=${rota:-?})${tran:+ | Transport: ${tran}}"
+      disk_found=1
+    done < <(lsblk -dn -P -o NAME,TYPE,VENDOR,MODEL,SIZE,ROTA,TRAN 2>/dev/null || true)
+  else
+    for d in /sys/block/*; do
+      [[ -d "$d" ]] || continue
+      name="$(basename "$d")"
+      [[ "$name" == loop* || "$name" == ram* || "$name" == zram* ]] && continue
+      rota="$(cat "$d/queue/rotational" 2>/dev/null || echo '?')"
+      vendor="$(tr -d '\0' < "$d/device/vendor" 2>/dev/null | xargs || true)"
+      model="$(tr -d '\0' < "$d/device/model" 2>/dev/null | xargs || true)"
+      media_type="Unknown"
+      [[ "$rota" == "0" ]] && media_type="SSD/Flash"
+      [[ "$rota" == "1" ]] && media_type="HDD/Rotational"
+      echo "  /dev/${name}: ${vendor:+$vendor }${model:-Unknown Model} | Media: ${media_type} (ROTA=${rota})"
+      disk_found=1
+    done
+  fi
+  if [[ "$disk_found" -eq 0 ]]; then
+    echo "  None detected"
+  fi
 elif [[ "$OS_KERNEL" == "Darwin" ]]; then
   echo "Manufacturer: Apple"
   if command -v system_profiler >/dev/null 2>&1; then
     system_profiler SPHardwareDataType 2>/dev/null | grep -E '^[[:space:]]*(Model Name|Model Identifier|Chip|Processor Name|Processor Speed|Total Number of Cores|Memory):' | sed 's/^[[:space:]]*//' || true
     echo "--- GPU / Displays ---"
     system_profiler SPDisplaysDataType 2>/dev/null | grep -E '^[[:space:]]*(Chipset Model|Total Number of Cores|VRAM):' | sed 's/^[[:space:]]*//' || true
+    echo "--- Storage Hardware (HDD / SSD) ---"
+    system_profiler SPNVMeDataType SPSerialATADataType 2>/dev/null | grep -E '^[[:space:]]*(Model|Capacity|Medium Type|Protocol|Link Width|Link Speed|TRIM Support):' | sed 's/^[[:space:]]*//' || true
   else
     echo "Model: $(sysctl -n hw.model 2>/dev/null || echo unknown)"
     echo "Architecture: $(uname -m)"
